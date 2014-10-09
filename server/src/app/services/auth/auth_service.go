@@ -20,13 +20,22 @@ func NewAuthService(accountsFile string) (*AuthService, error) {
 		return nil, err
 	}
 
-	return &AuthService{users}, nil
+	authService := &AuthService{
+		adminUsers: users,
+	}
+
+	return authService, nil
 }
 
 func (this *AuthService) Validate(userName, password string) *Token {
+
 	hashed := hashPassword(password)
+
+	// First check if administrator
 	if this.adminUsers[userName] == hashed {
 		return &Token{"Test", time.Now().Add(10 * time.Hour)}
 	}
+
+	// TODO: Other user types here
 	return nil
 }
