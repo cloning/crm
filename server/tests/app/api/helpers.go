@@ -2,7 +2,6 @@ package api
 
 import (
 	"../../../src/app/api"
-	"../../../src/app/services"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -30,8 +29,7 @@ func Get(path string) ([]byte, *http.Response, error) {
 
 func WithApi(fn apifn) {
 	var wg sync.WaitGroup
-	var service = services.NewService("Test")
-	api := api.NewApi(service, PORT, wg)
+	api := api.NewApi(PORT, wg)
 	defer func() {
 		api.Stop()
 		wg.Wait()

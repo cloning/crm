@@ -1,7 +1,7 @@
 package api
 
 import (
-	"../services"
+	//"../services"
 	"fmt"
 	"github.com/go-martini/martini"
 	"github.com/hydrogen18/stoppableListener"
@@ -13,15 +13,13 @@ import (
 )
 
 type Api struct {
-	service *services.Service
-	port    int
-	wg      sync.WaitGroup
-	sl      *stoppableListener.StoppableListener
+	port int
+	wg   sync.WaitGroup
+	sl   *stoppableListener.StoppableListener
 }
 
-func NewApi(service *services.Service, port int, wg sync.WaitGroup) *Api {
+func NewApi(port int, wg sync.WaitGroup) *Api {
 	return &Api{
-		service,
 		port,
 		wg,
 		nil,
@@ -38,12 +36,12 @@ func (this *Api) Run() {
 	m.Use(jsonp.JSONP(jsonp.Options{
 		ParameterName: "jsonp",
 	}))
-
-	m.Get("/", func(args martini.Params, r render.Render) {
-		user := this.service.GetUser()
-		r.JSON(200, user)
-	})
-
+	/*
+		m.Get("/", func(args martini.Params, r render.Render) {
+			user := this.service.GetUser()
+			r.JSON(200, user)
+		})
+	*/
 	this.listenAndServe(m)
 }
 

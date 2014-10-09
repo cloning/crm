@@ -3,7 +3,7 @@ package main
 import (
 	"./api"
 	"./configuration"
-	"./services"
+	//"./services"
 	"errors"
 	"fmt"
 	"os"
@@ -31,10 +31,9 @@ func NewApp(configurationFile string) (*App, error) {
 	var wg sync.WaitGroup
 
 	// Initialize any services here
-	service := services.NewService("Bootstrap Service")
 
 	// Initialize the API
-	api := api.NewApi(service, conf.Api.Port, wg)
+	api := api.NewApi(conf.Api.Port, wg)
 
 	app := &App{
 		Configuration: conf,
