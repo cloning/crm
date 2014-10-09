@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func parseAuthFile(filePath string) (map[string]string, error) {
+func parseAccountsFile(filePath string) (map[string]string, error) {
 	fileContent, err := ioutil.ReadFile(filePath)
 
 	if err != nil {
@@ -15,7 +15,18 @@ func parseAuthFile(filePath string) (map[string]string, error) {
 	userRows := strings.Split(string(fileContent), "\n")
 	users := make(map[string]string, len(userRows))
 	for _, row := range userRows {
+		row = strings.TrimSpace(row)
+
+		if strings.Index(row, "#") == 0 {
+			continue
+		}
+
 		user := strings.Split(row, ":")
+
+		if len(user) != 2 {
+			continue
+		}
+
 		users[user[0]] = user[1]
 	}
 

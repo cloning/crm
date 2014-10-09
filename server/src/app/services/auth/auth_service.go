@@ -14,7 +14,7 @@ type Token struct {
 }
 
 func NewAuthService(accountsFile string) (*AuthService, error) {
-	users, err := parseAuthFile(accountsFile)
+	users, err := parseAccountsFile(accountsFile)
 
 	if err != nil {
 		return nil, err
