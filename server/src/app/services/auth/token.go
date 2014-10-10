@@ -5,6 +5,7 @@ import (
 )
 
 type Token struct {
-	Token   string
-	Expires time.Time
+	UserName string
+	Key      string
+	Expires  time.Time
 }

@@ -1,1 +1,4 @@
 .DS_Store
+
+# Other SCM (can occur in vendor)
+.bzr/
