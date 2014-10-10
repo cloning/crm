@@ -7,6 +7,11 @@ import (
 	"time"
 )
 
+const (
+	AUTH_FILE_PATH = "./mock/.admin_accounts"
+	DATA_DIR       = "./data"
+)
+
 type AuthServiceCallback func(*auth.AuthService)
 
 func verifyToken(token *auth.Token, t *testing.T) {
@@ -28,19 +33,22 @@ func verifyToken(token *auth.Token, t *testing.T) {
 	}
 }
 
-func createAuthService(t *testing.T, accountsFile string, callback AuthServiceCallback) {
-	if err := os.Mkdir("./data", 0777); os.IsNotExist(err) {
+func createAuthService(t *testing.T, callback AuthServiceCallback) {
+	if err := os.Mkdir(DATA_DIR, 0777); os.IsNotExist(err) {
 		t.Error(err)
 	}
 	defer func() {
-		err := os.RemoveAll("./data")
+		err := os.RemoveAll(DATA_DIR)
 		if err != nil {
 			t.Error(err)
 		}
 	}()
 
-	tokenRepository := auth.NewFileTokenRepository("./data")
-	authService, err := auth.NewAuthService(accountsFile, tokenRepository)
+	tokenRepository, err := auth.NewFileTokenRepository(DATA_DIR)
+	if err != nil {
+		t.Errorf("Coudn't create token repository %v", err)
+	}
+	authService, err := auth.NewAuthService(AUTH_FILE_PATH, tokenRepository)
 
 	if err != nil {
 		t.Errorf("Coudn't create auth service %v", err)

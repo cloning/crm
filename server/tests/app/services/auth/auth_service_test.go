@@ -5,15 +5,11 @@ import (
 	"testing"
 )
 
-const (
-	AUTH_FILE_PATH = "./mock/.admin_accounts"
-)
-
 /*
 	Asserts that valid accounts give valid tokens
 */
 func TestAdminAccounts(t *testing.T) {
-	createAuthService(t, AUTH_FILE_PATH, func(authService *auth.AuthService) {
+	createAuthService(t, func(authService *auth.AuthService) {
 
 		t1 := authService.Validate("admin", "pwd")
 		t2 := authService.Validate("otheradmin", "pwd")
@@ -34,8 +30,12 @@ func TestAdminAccounts(t *testing.T) {
 	})
 }
 
+/*
+	A valid token key should be valid
+	and an invalid should now =)
+*/
 func TestTokenValidate(t *testing.T) {
-	createAuthService(t, AUTH_FILE_PATH, func(authService *auth.AuthService) {
+	createAuthService(t, func(authService *auth.AuthService) {
 
 		token := authService.Validate("admin", "pwd")
 
@@ -57,8 +57,8 @@ func TestTokenValidate(t *testing.T) {
 	Asserts that a token is persisted across instances of services
 */
 func TestTokenPersistance(t *testing.T) {
-	createAuthService(t, AUTH_FILE_PATH, func(authService1 *auth.AuthService) {
-		createAuthService(t, AUTH_FILE_PATH, func(authService2 *auth.AuthService) {
+	createAuthService(t, func(authService1 *auth.AuthService) {
+		createAuthService(t, func(authService2 *auth.AuthService) {
 			token := authService1.Validate("admin", "pwd")
 
 			verifyToken(token, t)
